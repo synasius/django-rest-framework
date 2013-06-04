@@ -490,11 +490,19 @@ try:
     from provider import scope as oauth2_provider_scope
     from provider import constants as oauth2_constants
 except ImportError:
-    oauth2_provider = None
-    oauth2_provider_models = None
-    oauth2_provider_forms = None
-    oauth2_provider_scope = None
-    oauth2_constants = None
+    # Try to use django-oauth-toolkit as provider
+    try:
+        import oauth2_provider
+        from oauth2_provider import models as oauth2_provider_models
+        from oauth2_provider import forms as oauth2_provider_forms
+        oauth2_provider_scope = None
+        oauth2_constants = None
+    except ImportError as e:
+        oauth2_provider = None
+        oauth2_provider_models = None
+        oauth2_provider_forms = None
+        oauth2_provider_scope = None
+        oauth2_constants = None
 
 # Handle lazy strings
 from django.utils.functional import Promise

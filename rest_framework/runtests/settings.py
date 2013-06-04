@@ -123,6 +123,15 @@ else:
         'provider.oauth2',
     )
 
+try:
+    import oauth2_provider
+except ImportError:
+    pass
+else:
+    INSTALLED_APPS += (
+        'oauth2_provider',
+    )
+
 STATIC_URL = '/static/'
 
 PASSWORD_HASHERS = (
