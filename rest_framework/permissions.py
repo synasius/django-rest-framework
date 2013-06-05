@@ -168,7 +168,40 @@ class TokenHasReadWriteScope(BasePermission):
         elif hasattr(token, 'scope'):  # OAuth 2
             required = oauth2_constants.READ if read_only else oauth2_constants.WRITE
             return oauth2_provider_scope.check(required, request.auth.scope)
+        # FIXME: NEED TO BE IMPLEMENTED FOR DJANGO-OAUTH_TOOLKIT
 
         assert False, ('TokenHasReadWriteScope requires either the'
+        '`OAuthAuthentication` or `OAuth2Authentication` authentication '
+        'class to be used.')
+
+
+class TokenHasScope(BasePermission):
+    """
+    The request is authenticated as a user and the token used has the right scope
+    """
+    # FIXME: THIS IS A PROOF OF CONCEPT!
+
+    def has_permission(self, request, view):
+        from oauth2_provider.views.mixins import ScopedResourceMixin
+        from oauth2_provider.backends import get_oauthlib_core
+
+        token = request.auth
+
+        if not token:
+            return False
+
+        # TODO: OAuth1 support
+        if hasattr(token, 'scope'):  # OAuth 2
+            assert isinstance(view, ScopedResourceMixin), \
+                ('TokenHasScope requires either the view to inherit ScopedResourceMixin '
+                 'or implement get_scopes method')
+
+            requested_scopes = view.get_scopes()
+
+            oauthlib_core = get_oauthlib_core(request)
+            valid, r = oauthlib_core.verify_request(request, requested_scopes)
+            return valid
+
+        assert False, ('TokenHasScope requires either the'
         '`OAuthAuthentication` or `OAuth2Authentication` authentication '
         'class to be used.')

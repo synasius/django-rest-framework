@@ -678,6 +678,7 @@ class OAuth2ToolkitTests(TestCase):
         self.assertIn(response.status_code, (status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN))
         self.assertIn('Invalid token', response.content)
 
+    # FIXME: TEST DISABLED UNTIL THIS PERMISSION CHECK IS IMPLEMENTED FOR DJANGO-OAUTH_TOOLKIT
     @unittest.skipUnless(False, 'django-oauth2-provider not installed')
     def test_post_form_with_invalid_scope_failing_auth(self):
         """Ensure POSTing with a readonly scope instead of a write scope fails"""

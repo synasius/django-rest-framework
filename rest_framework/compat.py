@@ -490,6 +490,7 @@ try:
     from provider import scope as oauth2_provider_scope
     from provider import constants as oauth2_constants
 except ImportError:
+    # FIXME: THIS IS A PROOF OF CONCEPT!
     # Try to use django-oauth-toolkit as provider
     try:
         import oauth2_provider
