@@ -198,7 +198,7 @@ class TokenHasScope(BasePermission):
 
             requested_scopes = view.get_scopes()
 
-            oauthlib_core = get_oauthlib_core(request)
+            oauthlib_core = get_oauthlib_core()
             valid, r = oauthlib_core.verify_request(request, requested_scopes)
             return valid
 
